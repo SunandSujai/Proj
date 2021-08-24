@@ -1,0 +1,64 @@
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+import tkinter as tk
+from tkinter import Frame,Label,Entry,Button
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
+inp1 = inp2 = 0
+class Window(Frame):
+
+        def __init__(self, master = None):
+        Frame.__init__(self, master)
+        self.master = master
+        self.init_window()
+
+    def Clear(self):
+        x=0
+
+    def init_window(self):
+
+        def animate(i):
+           self.line.set_ydata(np.sin(self.x+i/10.0)*float(inp2))  
+           return self.line,
+
+        self.master.title("Animated Sine Wave in Tkinter")
+        self.pack(fill='both', expand=1)     
+
+        self.labelSpeed = Label(self,text="Speed (m/s)",width=12)
+        self.labelSpeed.grid(row=110,column=100)
+        self.labelAmplitude = Label(self,text="Amplitude",width=12)
+        self.labelAmplitude.grid(row=110,column=200)
+
+        self.textSpeed = Entry(self,width=12)
+        self.textSpeed.grid(row=120,column=100)
+        inp1 = self.textSpeed.get()
+        print(inp1)
+        if inp1 =="":
+            inp1 = 1
+        
+        self.textAmplitude = Entry(self,width=12)
+        self.textAmplitude.grid(row=120,column=200)
+        inp2 = self.textAmplitude.get()
+        print(inp2)
+        if inp2 =="":
+            inp2 = 1
+
+        tk.Label(self,text="SHM Animation").grid(column=4000, row=3)
+
+        self.fig = plt.Figure()
+
+        self.x = np.arange(0, 2*np.pi, 0.01)        
+
+        self.ax = self.fig.add_subplot(111)
+        self.line, = self.ax.plot(self.x, np.sin(self.x)*float(inp2))        
+
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self)
+        self.canvas.get_tk_widget().grid(column=4000,row=80)
+        self.ani = animation.FuncAnimation(self.fig, animate, np.arange(1, 200), interval = inp1, blit=False)
+
+root = tk.Tk()
+root.geometry("3000x1000")
+app = Window(root)
+tk.mainloop()
