@@ -1,0 +1,33 @@
+import numpy as np
+
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backend_bases import key_press_handler
+from matplotlib.figure import Figure
+
+from tkinter import *
+control = Tk()
+control.title("Sine graph in tkinter")
+control.geometry("3000x1000")
+
+def graph():
+    inp = t.get("1.0", "end-1c")
+    fig = Figure(figsize=(5, 4), dpi=100)
+    x = np.arange(0, 4*np.pi, .01)
+    y = np.sin(x)
+    fig.add_subplot(111).plot(x, y*int(inp))
+
+    canvas = FigureCanvasTkAgg(fig, master=control)  
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+
+t = Text(control, height = 0.6, width = 25)
+t.pack()
+
+b = Button(master = control, text = "View Graph", command = graph)
+b.pack()
+
+l = Label(control, text = "Enter amplitude")
+l.pack()
+
+control.mainloop()
