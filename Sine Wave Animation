@@ -6,10 +6,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-inp1 = inp2 = 0
-class Window(Frame):
+inp2 = 0
+    
+        
+root = tk.Tk()
+root.geometry("3000x1000")
 
-        def __init__(self, master = None):
+class Window(Frame):
+    def close_window():
+        global entry
+        entry = E.get()
+        root.destroy()
+    
+    def __init__(self, master = None):
         Frame.__init__(self, master)
         self.master = master
         self.init_window()
@@ -26,17 +35,8 @@ class Window(Frame):
         self.master.title("Animated Sine Wave in Tkinter")
         self.pack(fill='both', expand=1)     
 
-        self.labelSpeed = Label(self,text="Speed (m/s)",width=12)
-        self.labelSpeed.grid(row=110,column=100)
         self.labelAmplitude = Label(self,text="Amplitude",width=12)
         self.labelAmplitude.grid(row=110,column=200)
-
-        self.textSpeed = Entry(self,width=12)
-        self.textSpeed.grid(row=120,column=100)
-        inp1 = self.textSpeed.get()
-        print(inp1)
-        if inp1 =="":
-            inp1 = 1
         
         self.textAmplitude = Entry(self,width=12)
         self.textAmplitude.grid(row=120,column=200)
@@ -50,15 +50,17 @@ class Window(Frame):
         self.fig = plt.Figure()
 
         self.x = np.arange(0, 2*np.pi, 0.01)        
-
+        self.y = np.sin(self.x) * inp2
         self.ax = self.fig.add_subplot(111)
-        self.line, = self.ax.plot(self.x, np.sin(self.x)*float(inp2))        
+        self.line, = self.ax.plot(self.x, self.y)        
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=self)
         self.canvas.get_tk_widget().grid(column=4000,row=80)
-        self.ani = animation.FuncAnimation(self.fig, animate, np.arange(1, 200), interval = inp1, blit=False)
+        self.ani = animation.FuncAnimation(self.fig, animate, np.arange(1, 200), interval = 50, blit=False)
+        
+        B = Button(master = root, text = "Graph", command = close_window)
+        B.pack(anchor = "center")
 
-root = tk.Tk()
-root.geometry("3000x1000")
 app = Window(root)
-tk.mainloop()
+
+root.mainloop()
