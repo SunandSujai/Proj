@@ -1,0 +1,56 @@
+import mysql.connector
+
+# C is centre of curvature, F is focus, P is pole
+print("Positions for object:")
+print("1. At Infinity")
+print("2. Beyond C")
+print("3. At C")
+print("4. Between C and F")
+print("5. At F")
+print("6. Between F and P")
+
+while True:
+    ch = input("Enter choice:")
+
+    try:
+        con = mysql.connector.connect(host="localhost", user="<Name of user>", password="<password>", db="<Name of Database>")
+
+        if con.is_connected():
+            o_pos = ""
+
+            if ch == '1':
+                o_pos = "At Infinity"
+            elif ch == '2':
+                o_pos = "Beyond C"
+            elif ch == '3':
+                o_pos = "At C"
+            elif ch == '4':
+                o_pos = "Between C and F"
+            elif ch =='5':
+                o_pos = "At F"
+            elif ch == '6':
+                o_pos = "Between F and P"
+            else:
+                print("Incorrect input")
+                continue
+
+            mycursor = con.cursor()
+            s = "Select * from Ray_Diagrams where <name of column for object position> = \"%s\""
+            mycursor.execute(s % o_pos)
+            result = mycursor.fetchone()
+            print(result)
+
+        else:
+            print("Connection not established")
+
+    except mysql.connector.Error as e:
+        print(e)
+
+    else:
+        con.close()
+
+    print("Do you wish to exit program?")
+    choice = input("Enter Y to exit : ")
+    if choice == 'Y' or choice == 'y':
+        print("Exiting...")
+        break
