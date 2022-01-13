@@ -13,10 +13,6 @@ root = tk.Tk()
 root.geometry("3000x1000")
 
 class Window(Frame):
-    def close_window():
-        global entry
-        entry = E.get()
-        root.destroy()
     
     def __init__(self, master = None):
         Frame.__init__(self, master)
@@ -27,7 +23,12 @@ class Window(Frame):
         x=0
 
     def init_window(self):
-
+        
+        def close_window():
+            global entry
+            entry = E.get()
+            root.destroy()
+       
         def animate(i):
            self.line.set_ydata(np.sin(self.x+i/10.0)*float(inp2))  
            return self.line,
